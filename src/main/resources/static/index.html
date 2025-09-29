@@ -1,10 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Sharing System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        section { margin-bottom: 40px; }
+        input, button { padding: 8px; margin: 5px 0; width: 100%; max-width: 300px; }
+        label { font-weight: bold; display: block; margin-top: 10px; }
+    </style>
 </head>
 <body>
-$END$
+
+<h1>File Sharing System</h1>
+
+<!-- Register/Login Section (placeholder) -->
+<section id="auth">
+    <h2>Register / Login</h2>
+    <p>For testing, assume users are already authenticated.</p>
+</section>
+
+<!-- File Sending Section -->
+<section id="sendFileSection">
+    <h2>Send File</h2>
+    <label for="sessionCode">Session Code (auto-generated):</label>
+    <input type="text" id="sessionCode" readonly>
+
+    <label for="fileInput">Select File:</label>
+    <input type="file" id="fileInput">
+
+    <button onclick="sendFile()">Send File</button>
+    <p id="sendStatus"></p>
+</section>
+
+<!-- File Receiving Section -->
+<section id="receiveFileSection">
+    <h2>Receive File</h2>
+    <label for="receiveCode">Enter Session Code:</label>
+    <input type="text" id="receiveCode" placeholder="Enter code from sender">
+
+    <button onclick="receiveFile()">Receive File</button>
+    <p id="receiveStatus"></p>
+</section>
+
+<script>
+    // Generate random 6-character code for sender
+    function generateCode() {
+        const code = Math.random().toString(36).substring(2, 8).toUpperCase();
+        document.getElementById('sessionCode').value = code;
+    }
+
+    window.onload = generateCode;
+
+    // WebSocket connection for real-time signaling
+    let ws = new WebSocket("ws://localhost:8080/ws");
+
+    ws.onopen = () => {
+        console.log("WebSocket connected");
+    };
+
+    ws.onmessage = (msg) => {
+        const data = JSON.parse(msg.data);
+        const receiveCode = document.getElementById('receiveCode').value;
+        if (data.type === 'FILE_READY' && data.code === receiveCode) {
+            alert('File is ready to download!');
+        }
+    };
+
+    ws.onerror = (err) => console.error("WebSocket error:", err);
+
+    // Send file to backend
+    async function sendFile() {
+        const fileInput = document.getElementById('fileInput');
+        const code = document.getElementById('sessionCode').value;
+        const file = fileInput.files[0];
+
+        if (!file) {
+            document.getElementById('sendStatus').innerText = "Select a file first!";
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const res = await fetch(`/relay/${code}/upload`, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (res.ok) {
+                document.getElementById('sendStatus').innerText = `File sent successfully! Share this code with receiver: ${code}`;
+
+                // Notify via WebSocket that file is ready
+                ws.send(JSON.stringify({ type: 'FILE_READY', code: code }));
+            } else {
+                document.getElementById('sendStatus').innerText = "Error sending file!";
+            }
+        } catch (err) {
+            document.getElementById('sendStatus').innerText = "Error: " + err.message;
+        }
+    }
+
+    // Receive file from backend
+    async function receiveFile() {
+        const code = document.getElementById('receiveCode').value.trim();
+        if (!code) {
+            document.getElementById('receiveStatus').innerText = "Enter a valid session code!";
+            return;
+        }
+
+        try {
+            const res = await fetch(`/relay/${code}/download`);
+            if (res.ok) {
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = "received_file"; // optional: could send original filename
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+
+                document.getElementById('receiveStatus').innerText = "File downloaded successfully!";
+            } else {
+                document.getElementById('receiveStatus').innerText = "No file available for this code.";
+            }
+        } catch (err) {
+            document.getElementById('receiveStatus').innerText = "Error: " + err.message;
+        }
+    }
+</script>
 </body>
 </html>
