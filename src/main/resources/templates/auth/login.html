@@ -3,15 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
+    <title>Login - Secure File Transfer</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Container for the login form */
+        .login-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px 50px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            width: 350px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            font-size: 2em;
+            color: #00ffd5;
+            text-shadow: 0 0 10px #00ffd5;
+        }
+
+        hr {
+            border: 0;
+            height: 2px;
+            background: #00ffd5;
+            margin-bottom: 30px;
+        }
+
+        /* Input fields */
+        input[type="text"],
+        input[type="password"] {
+            width: 90%;
+            padding: 12px 15px;
+            margin: 10px 0px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1em;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="password"]::placeholder {
+            color: #dddddd;
+        }
+
+        /* Submit button */
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #00ffd5;
+            color: #0f2027;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background: #00e0c0;
+            box-shadow: 0 0 10px #00ffd5;
+        }
+
+        /* Subtitle for Blockchain concept */
+        .subtitle {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #a0f0ff;
+        }
+    </style>
 </head>
 <body>
-<h1>Login</h1>
-<hr>
-<form method="post" action="/auth/login-process">
-<input type="text" name="username"> <br>
-<input type="password" name="password"> <br>
-<input type="submit" value="login">
-</form>
+<div class="login-container">
+    <h1>Secure Login</h1>
+    <hr>
+    <form method="post" action="/auth/login-process">
+        <input type="text" name="username" placeholder="Username"> <br>
+        <input type="password" name="password" placeholder="Password"> <br>
+        <input type="submit" value="Login">
+    </form>
+    <div class="subtitle">
+        Blockchain-based file transfer platform<br>
+        Secure. Decentralized. Transparent.
+    </div>
+</div>
 </body>
 </html>
