@@ -6,7 +6,6 @@ target/
 
 ### MINE ###
 .mvn/
-mvnw
 ### STS ###
 .apt_generated
 .classpath
