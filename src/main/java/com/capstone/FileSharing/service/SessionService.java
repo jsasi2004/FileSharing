@@ -2,6 +2,7 @@ package com.capstone.FileSharing.service;
 
 import com.capstone.FileSharing.model.TransferSession;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.Map;
@@ -34,5 +35,14 @@ public class SessionService {
                 (entry.getValue().getSender() != null && entry.getValue().getSender().equals(socket)) ||
                         (entry.getValue().getReceiver() != null && entry.getValue().getReceiver().equals(socket))
         );
+    }
+
+    // Store uploaded file in memory
+    public void storeFile(String code, MultipartFile file) throws Exception {
+        TransferSession session = sessions.getOrDefault(code, new TransferSession(code));
+        session.setCode(code);
+        session.setFile(file.getBytes());
+        session.setFilename(file.getOriginalFilename());
+        sessions.put(code, session);
     }
 }
