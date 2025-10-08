@@ -1,7 +1,11 @@
 package com.capstone.FileSharing.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
@@ -19,14 +23,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    // Optional: role-based access
-    @Column
-    private String role = "USER";
+    @ManyToOne
+    private Role role;
 
-    public User() {
-    }
-
-    public User(String username, String email, String password, String role) {
+    public User(String username, String email, String password, Role role) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -67,10 +67,10 @@ public class User {
     }
 
     public String getRole() {
-        return role;
+        return role.getName();
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 }

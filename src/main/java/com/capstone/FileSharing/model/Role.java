@@ -1,7 +1,13 @@
 package com.capstone.FileSharing.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
+@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "roles")
 public class Role {
@@ -13,8 +19,8 @@ public class Role {
     @Column(nullable = false, unique = true)
     private String name;  // e.g., "USER", "ADMIN"
 
-    public Role() {
-    }
+    @OneToMany(mappedBy = "role")
+    private Set<User> users;
 
     public Role(String name) {
         this.name = name;

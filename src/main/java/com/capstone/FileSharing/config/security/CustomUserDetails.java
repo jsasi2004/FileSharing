@@ -30,4 +30,8 @@ public class CustomUserDetails implements UserDetails {
     public String getUsername() {
         return user.getUsername();
     }
+
+    public String getRole() {
+        return  user.getRole();
+    }
 }

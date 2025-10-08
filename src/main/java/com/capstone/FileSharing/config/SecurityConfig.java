@@ -1,7 +1,7 @@
 package com.capstone.FileSharing.config;
 
+import com.capstone.FileSharing.config.security.CustomAuthSuccessHandler;
 import com.capstone.FileSharing.config.security.CustomUserDetailsService;
-import com.capstone.FileSharing.filter.JwtCookieFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,11 +12,9 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -24,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
-    private final JwtCookieFilter jwtCookieFilter;
+    private final CustomAuthSuccessHandler customAuthSuccessHandler;
 
     // Password encoder for hashing user passwords
     @Bean
@@ -65,7 +63,7 @@ public class SecurityConfig {
                                 "/js/**",
                                 "/images/**"
                         ).permitAll()
-                        // Everything else requires authentication
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(
@@ -74,7 +72,8 @@ public class SecurityConfig {
                                     .passwordParameter("password")
                                     .loginPage("/auth/login")
                                     .loginProcessingUrl("/auth/login-process")
-                                    .defaultSuccessUrl("/", true)
+//                                    .defaultSuccessUrl("/", true)
+                                    .successHandler(customAuthSuccessHandler)
                                     .permitAll()
                 );
 

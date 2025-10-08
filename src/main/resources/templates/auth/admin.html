@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login - Secure File Transfer</title>
+    <title>Secure File Transfer - Admin</title>
     <style>
         /* General body styling */
         body {
@@ -44,6 +44,7 @@
 
         /* Input fields */
         input[type="text"],
+        input[type="email"],
         input[type="password"] {
             width: 90%;
             padding: 12px 15px;
@@ -55,7 +56,7 @@
             font-size: 1em;
         }
 
-        input[type="text"]::placeholder,
+        input[type="text"]::placeholder,input[type="email"],
         input[type="password"]::placeholder {
             color: #dddddd;
         }
@@ -90,26 +91,19 @@
 </head>
 <body>
 <div class="login-container">
-    <h1>Secure Login</h1>
+    <h1>Welcome Admin</h1>
     <hr>
-
-    <div th:if="${param.error}">
-        <div class="alert alert-danger" role="alert" >
-            <div th:switch="${session.SPRING_SECURITY_LAST_EXCEPTION.message}">
-                <div th:case="'Bad credentials'" style="color: red;">
-                    Invalid user details
-                </div>
-                <div th:case="*">
-                    <span th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}"></span>
-                </div>
-            </div>
-        </div>
+    <div th:if="${param.success}">
+        User Added successfully
     </div>
-
-    <form method="post" action="/auth/login-process">
-        <input type="text" name="username" placeholder="Username"> <br>
-        <input type="password" name="password" placeholder="Password"> <br>
-        <input type="submit" value="Login">
+    <div th:if="${param.error}">
+        User creation failed
+    </div>
+    <form method="post" action="/admin/add-user" th:object="${user}">
+        <input type="text" name="username" placeholder="Username" th:field="*{username}"> <br>
+        <input type="email" name="email" placeholder="email" th:field="*{email}"> <br>
+        <input type="password" name="password" placeholder="Password" th:field="*{password}"> <br>
+        <input type="submit" value="Add User">
     </form>
     <div class="subtitle">
         Blockchain-based file transfer platform<br>

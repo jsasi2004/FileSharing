@@ -13,5 +13,10 @@ public class AuthController {
         return "auth/login";
     }
 
+    @GetMapping("/admin")
+    String getAdminPage(){
+        return "auth/admin";
+    }
+
 
 }

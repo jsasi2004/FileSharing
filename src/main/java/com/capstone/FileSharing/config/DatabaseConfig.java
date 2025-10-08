@@ -1,7 +1,5 @@
 package com.capstone.FileSharing.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -9,11 +7,11 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 import javax.sql.DataSource;
 
-@Configuration
+//@Configuration
 public class DatabaseConfig {
 
     // EntityManagerFactory for JPA
-    @Bean
+//    @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
@@ -23,7 +21,7 @@ public class DatabaseConfig {
     }
 
     // Transaction Manager
-    @Bean
+//    @Bean
     public JpaTransactionManager transactionManager(LocalContainerEntityManagerFactoryBean entityManagerFactory) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory.getObject());
@@ -31,7 +29,7 @@ public class DatabaseConfig {
     }
 
     // JdbcTemplate if you want to run raw SQL queries
-    @Bean
+//    @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
