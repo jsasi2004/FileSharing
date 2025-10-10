@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -109,6 +109,8 @@
     <form method="post" action="/auth/login-process">
         <input type="text" name="username" placeholder="Username"> <br>
         <input type="password" name="password" placeholder="Password"> <br>
+        <label>
+        <input type="checkbox" name="remember-me">Remember me</label>
         <input type="submit" value="Login">
     </form>
     <div class="subtitle">

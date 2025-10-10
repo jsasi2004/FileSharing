@@ -20,7 +20,7 @@ public class AdminController {
 
     @GetMapping
     public String getAdminPage(@ModelAttribute("user") User user) {
-        return "auth/admin";
+        return "auth/admin.html";
     }
 
     @PostMapping("/add-user")

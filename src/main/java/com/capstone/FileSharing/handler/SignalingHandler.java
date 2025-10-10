@@ -4,6 +4,8 @@ import com.capstone.FileSharing.model.SignalingMessage;
 import com.capstone.FileSharing.model.TransferSession;
 import com.capstone.FileSharing.service.SessionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
@@ -20,13 +22,13 @@ public class SignalingHandler extends TextWebSocketHandler {
     }
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+    public void afterConnectionEstablished(@NonNull WebSocketSession session) throws Exception {
         // Connection opened
         System.out.println("WebSocket connected: " + session.getId());
     }
 
     @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+    protected void handleTextMessage(@NonNull WebSocketSession session, @NonNull TextMessage message) throws Exception {
         // Parse incoming message
         SignalingMessage signalingMessage = objectMapper.readValue(message.getPayload(), SignalingMessage.class);
         String code = signalingMessage.getCode();
@@ -53,7 +55,7 @@ public class SignalingHandler extends TextWebSocketHandler {
     }
 
     @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+    public void afterConnectionClosed(@NonNull WebSocketSession session, @NonNull CloseStatus status) throws Exception {
         // Remove session if either peer disconnects
         sessionService.removeSessionBySocket(session);
         System.out.println("WebSocket disconnected: " + session.getId());
